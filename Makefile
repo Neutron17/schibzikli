@@ -13,6 +13,7 @@ CCFLAGS += $(INCFLAGS)
 CCFLAGS += -O0
 CCFLAGS += -Wall
 CCFLAGS += -pedantic
+CCFLAGS += -fsanitize=address
 
 LDFLAGS  = $(INCFLAGS)
 LDFLAGS += -lpthread
