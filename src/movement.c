@@ -12,10 +12,10 @@ struct MovePair {
 // array of MovePairs
 static Array_t movableEntityMap;
 
-void movementInit() {
+void movementInit(void) {
 	UNWRAP_TO_COMPLEX(array_init(struct MovePair, 3), movableEntityMap, Array_t);
 }
-void movementDestroy() {
+void movementDestroy(void) {
 	array_destroy(&movableEntityMap);
 }
 /** Binds callback to entity, not thread safe */
@@ -32,8 +32,7 @@ void movementUnbind(Entity entity) {
 		return;
 	array_null(&movableEntityMap, entity._moveID-1);
 }
-
-static const Uint8 *states;
+const static Uint8 *states;
 static void movementForEach(void *data) {
 	if(!data)
 		return;
@@ -45,10 +44,12 @@ static void movementForEach(void *data) {
 	//printf("(%d %d)\n", p->x, p->y);
 	*p = pair.cb(pair.e, states, tilePropFromPos(pFloor));
 }
-
+extern bool quit;
 /** Calls the movement callback on each bound entity */
 void movementMoveAll() {
 	states = SDL_GetKeyboardState(NULL);
+	if(states[SDL_SCANCODE_ESCAPE] || states[SDL_SCANCODE_Q])
+		quit = true;
 	array_for_each(movableEntityMap, movementForEach);
 }
 

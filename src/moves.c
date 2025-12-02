@@ -8,14 +8,9 @@
 extern bool quit;
 static Pos dest;
 
-PosF movePlayer(Entity *self, const Uint8 *keystates, TileProp tile) {
+PosF movePlayer(Entity *self, const Uint8 *const keystates, TileProp tile) {
 	PosF pl = *(PosF *)self;
 	//printf("(%d %d) -> ", pl.x, pl.y);
-	if(keystates[SDL_SCANCODE_ESCAPE] || keystates[SDL_SCANCODE_Q]) {
-		quit = true;
-		return pl;
-	}
-
 	const int speed = (self->state.speed + (keystates[SDL_SCANCODE_LSHIFT] ? self->state.speed/2 : 0)) * tile.speed_mul;
 	dmgResolve(NULL, self, (Dmg){.type=DMG_TILE, .value=tile.dmg_p_sec});
 
@@ -29,7 +24,7 @@ PosF movePlayer(Entity *self, const Uint8 *keystates, TileProp tile) {
 	return pl;
 }
 
-PosF moveGimp(Entity *self, const Uint8 *keystates, TileProp tile) {
+PosF moveGimp(Entity *self, const Uint8 *const keystates, TileProp tile) {
 	if(POS_DIST(*(PosF *)self, *(PosF *)player) < 0.5)
 		return *(PosF *)self;
 	const double a = atan2(player->y - self->y, player->x - self->x);

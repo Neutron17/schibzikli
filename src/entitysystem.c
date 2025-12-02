@@ -26,6 +26,9 @@ void entitysystemDestroy(void) {
 	array_destroy(&entities);
 	pthread_mutex_destroy(&id_mutex);
 }
+void entitysystemClear(void) {
+	array_clear(&entities);
+}
 Entity *entitysystemAdd(Entity *e) {
 	pthread_mutex_lock(&id_mutex);
 	e->_id = id_counter;

@@ -47,6 +47,7 @@ Entity *entitysystemAdd(Entity *e);
 /** Calls 'movementUnbind'
  * Destroys the texture */
 void entitysystemRemove(Entity *e);
+void entitysystemClear(void);
 void entitysystemDrawAll(void);
 Entity *_entity(Pos pos, int w, int h, enum EntityType type, struct EntityState state, SDL_Texture *texture);
 #define ENTITY(P, W, H, S, T) _entity(P,W,H,ET_DEFAULT,S,T)
