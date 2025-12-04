@@ -4,14 +4,12 @@
 #include "global.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
-#include "tile.h"
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 int width = 500, height = 500;
 
 void graphInit(const char *title, int w, int h) {
-	distanceInit(8);
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		LOGF(L_ERR, "Couldn't init SDL, '%s'", SDL_GetError());
 		cleanUp(E_SDL);

@@ -13,6 +13,18 @@
 #define _NTR_TILE_H_ 1
 #include <SDL2/SDL_render.h>
 #include "graph.h"
+#include "entitysystem.h"
+#include "base/arena.h"
+
+struct TEntityNode {
+	Entity entity;
+	Entity *next;
+};
+
+typedef struct {
+	struct TEntityNode *entityList;
+	int type;
+} Tile;
 
 /** Tile Properties 
  * represent the attributes of a single tile */
@@ -33,21 +45,25 @@ typedef struct {
 	// 'properties' are NOT freed by the tilesystem
 	TileProp *properties;
 	int len;
+	int w,h;
+	Arena arenaAllocator;
 } TileEnv;
 
-void tilemapSet(TileEnv _env, int *_tiles, int x, int y);
+void tilemapInit(TileEnv _env, const int *const _tiles);
+void tilemapRefill(TileEnv _env, const int *const _tiles);
 void tilemapDestroy();
-TileProp tilePropFromPos(Pos pos);
 
 /** Copies the tile textures to the renderer
  * The tiles are defined with 'tilemapSet()'
  *
  * Note:
- *  'distanceInit()' and 'tilemapSet()' must be called beforehand */
+ *  'tilemapInit()' must be called beforehand */
 void tilemapDraw();
-/** Initializes a private variable required to perform 
- * other operations later on */
-void distanceInit(int n);
+
+struct EntityNode *tileEntitiesGet(int x, int y);
+void tileEntityRegister(int x, int y);
+
+TileProp tilePropFromPos(Pos pos);
 
 #endif /* ifndef _NTR_TILE_H_ */
 

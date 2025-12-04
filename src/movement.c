@@ -4,6 +4,7 @@
 #include "entitysystem.h"
 #include "global.h"
 #include "tile.h"
+#include <SDL2/SDL_stdinc.h>
 
 struct MovePair {
 	Entity *e;
@@ -11,8 +12,10 @@ struct MovePair {
 };
 // array of MovePairs
 static Array_t movableEntityMap;
+const static Uint8 *states;
 
 void movementInit(void) {
+	states = SDL_GetKeyboardState(NULL);
 	UNWRAP_TO_COMPLEX(array_init(struct MovePair, 3), movableEntityMap, Array_t);
 }
 void movementDestroy(void) {
@@ -32,7 +35,6 @@ void movementUnbind(Entity entity) {
 		return;
 	array_null(&movableEntityMap, entity._moveID-1);
 }
-const static Uint8 *states;
 static void movementForEach(void *data) {
 	if(!data)
 		return;
@@ -47,7 +49,6 @@ static void movementForEach(void *data) {
 extern bool quit;
 /** Calls the movement callback on each bound entity */
 void movementMoveAll() {
-	states = SDL_GetKeyboardState(NULL);
 	if(states[SDL_SCANCODE_ESCAPE] || states[SDL_SCANCODE_Q])
 		quit = true;
 	array_for_each(movableEntityMap, movementForEach);

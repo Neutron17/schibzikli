@@ -1,3 +1,4 @@
+#include <SDL2/SDL_render.h>
 #include <stdlib.h>
 #include <pthread.h>
 
@@ -40,7 +41,7 @@ Entity *entitysystemAdd(Entity *e) {
 }
 
 Entity *_entity(Pos p, int w, int h, enum EntityType type, struct EntityState state, SDL_Texture *texture) {
-	Entity ret = { p.x, p.y, w,h, type, state,texture };
+	Entity ret = { p.x, p.y, w,h, 0.0,0.0,type, state,texture };
 	return entitysystemAdd(&ret);
 }
 
@@ -63,21 +64,60 @@ void entitysystemRemove(Entity *e) {
 	memset(e, 0, sizeof(*e));
 }
 
+static const Pos spriteLUT[] = {
+	[AS_BACK] = POS(64,2*64),
+	[AS_BACK_1] = POS(0,0),
+	[AS_BACK_2] = POS(0,64),
+	[AS_FRONT] = POS(2*64, 64),
+	[AS_FRONT_1] = POS(0,2*64),
+	[AS_FRONT_2] = POS(0,3*64),
+	[AS_SIDE_LEFT] = POS(2*64, 0),
+	[AS_SIDE_LEFT_STEP] = POS(64,64),
+	[AS_SIDE_RIGHT] = POS(64,3*64),
+	[AS_SIDE_RIGHT_STEP] = POS(64,0),
+};
+
 void entitysystemDrawAll(void) {
 	for(int i = 0; i < entities.used; i++) {
 		Entity dest;
 		UNWRAP_TO(array_index(entities, i), dest, Entity);
 		if(dest._id == 0)
 			continue;
-		/*const SDL_Rect playerRect = { 
-			width/2 - (player->w/2), height/2 - (player->h/2), 
-			player->w, player->h };*/
-		const SDL_Rect entRect = { 
+		const SDL_Rect destRect = { 
 			dest.x - player->x + (float)(width - dest.w)/2, 
 			dest.y - player->y + (float)(height - dest.h)/2,
 			dest.w, dest.h };
-		SDL_RenderCopy(renderer, dest.texture, NULL, &entRect);
+		if(dest._moveID == 0) {
+			SDL_RenderCopy(renderer, dest.texture, NULL, &destRect);
+		} else {
+			const Pos p = spriteLUT[dest.state.aState];
+			SDL_Rect srcrect = {
+				p.x,p.y,
+				64,64
+			};
+			SDL_RenderCopy(renderer, dest.texture, &srcrect, &destRect);
+
+		}
 		//printf("here %d\n", dest._id);
 	}
+}
+
+Entity *entitysystemGetPtr(int id) {
+	for(int i = 0; i < entities.used; i++) {
+		Entity *ent;
+		UNWRAP_TO_PTR(array_index(entities, i), ent, Entity);
+		if(ent->_id == id)
+			return ent;
+	}
+	return NULL;
+}
+Entity entitysystemGet(int id) {
+	for(int i = 0; i < entities.used; i++) {
+		Entity ent;
+		UNWRAP_TO(array_index(entities, i), ent, Entity);
+		if(ent._id == id)
+			return ent;
+	}
+	return (Entity){0};
 }
 

@@ -1,5 +1,5 @@
 # TODOs
 
- - Collision
- - Objects
+ - Universal entity orientation, etc.
+ - Font rendering
 

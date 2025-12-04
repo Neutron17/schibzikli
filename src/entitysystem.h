@@ -8,6 +8,19 @@
 #include <SDL2/SDL.h>
 #include "graph.h"
 
+enum AnimState {
+	AS_BACK,
+	AS_BACK_1,
+	AS_BACK_2,
+	AS_FRONT,
+	AS_FRONT_1,
+	AS_FRONT_2,
+	AS_SIDE_LEFT,
+	AS_SIDE_LEFT_STEP,
+	AS_SIDE_RIGHT,
+	AS_SIDE_RIGHT_STEP,
+};
+
 enum EntityType {
 	ET_NO_STATE 	= 0,
 	ET_HAS_HEALTH 	= 1 << 0,
@@ -25,6 +38,7 @@ struct EntityState {
 	float thorn_percent;
 	float shield_percent;
 	float speed;
+	enum AnimState aState;
 };
 
 /**
@@ -32,6 +46,7 @@ struct EntityState {
 typedef struct {
 	float x,y;
 	int w,h;
+	float vx,vy;
 	enum EntityType type;
 	struct EntityState state;
 	SDL_Texture *texture;
@@ -49,6 +64,8 @@ Entity *entitysystemAdd(Entity *e);
 void entitysystemRemove(Entity *e);
 void entitysystemClear(void);
 void entitysystemDrawAll(void);
+Entity entitysystemGet(int id);
+Entity *entitysystemGetPtr(int id);
 Entity *_entity(Pos pos, int w, int h, enum EntityType type, struct EntityState state, SDL_Texture *texture);
 #define ENTITY(P, W, H, S, T) _entity(P,W,H,ET_DEFAULT,S,T)
 

@@ -19,6 +19,7 @@ LDFLAGS  = $(INCFLAGS)
 LDFLAGS += -lpthread
 LDFLAGS += -lSDL2
 LDFLAGS += -lSDL2_image
+LDFLAGS += -lSDL2_ttf
 LDFLAGS += -lrt
 LDFLAGS += -lm
 

@@ -49,6 +49,7 @@ Option _Option_ComplexWrap(const void *ret, bool isErr, unsigned sz);
  ****************/
 
 #define UNWRAP_TO(OPT, DEST, TYPE) { Option __Option_unwrapper = OPT; if(__Option_unwrapper.isErr) { LOG(L_ERR, ""); } DEST = *((TYPE *) __Option_unwrapper.ret); }
+#define UNWRAP_TO_PTR(OPT, DEST, TYPE) { Option __Option_unwrapper = OPT; if(__Option_unwrapper.isErr) { LOG(L_ERR, ""); } DEST = ((TYPE *) __Option_unwrapper.ret); }
 
 /* WARNING: Do not pass a function to OPT
  * exa:
@@ -58,7 +59,7 @@ Option _Option_ComplexWrap(const void *ret, bool isErr, unsigned sz);
 #define UNWRAP_TO_COMPLEX_(OPT, DEST, TYPE) { memcpy(DEST, OPT.ret, sizeof(TYPE)); free(OPT.ret); }
 /* exa: 
  * Array_t arr;
- * UNWRAP_COMPLEX(array_init(...), &arr, Array_r) */
+ * UNWRAP_COMPLEX(array_init(...), &arr, Array_t) */
 #define UNWRAP_TO_COMPLEX(FN, DEST, TYPE) { Option __Option_unwrapper = FN; DEST = *((TYPE*)__Option_unwrapper.ret); free(__Option_unwrapper.ret); }
 
 
