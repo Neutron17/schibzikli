@@ -22,21 +22,22 @@ PosF movePlayer(Entity *self, const Uint8 *const keystates, TileProp tile) {
 	//const int speed = (self->state.speed + (keystates[SDL_SCANCODE_LSHIFT] ? self->state.speed/2 : 0)) * tile.speed_mul;
 	
 	dmgResolve(NULL, self, (Dmg){.type=DMG_TILE, .value=tile.dmg_p_sec});
+	printf("%lf\n", tile.speed_mul);
 	bool vflag = false, hflag = false;
 	if(keystates[SDL_SCANCODE_A]) {
-		player->vx = -self->state.speed;
+		player->vx = -self->state.speed*tile.speed_mul;
 		hflag = true;
 	}
 	if(keystates[SDL_SCANCODE_D]) {
-		player->vx = self->state.speed;
+		player->vx = self->state.speed*tile.speed_mul;
 		hflag = true;
 	}
 	if(keystates[SDL_SCANCODE_W]) {
-		player->vy = -self->state.speed;
+		player->vy = -self->state.speed*tile.speed_mul;
 		vflag = true;
 	}
 	if(keystates[SDL_SCANCODE_S]) {
-		player->vy = self->state.speed;
+		player->vy = self->state.speed*tile.speed_mul;
 		vflag = true;
 	}
 	if(!vflag)
@@ -50,7 +51,7 @@ PosF movePlayer(Entity *self, const Uint8 *const keystates, TileProp tile) {
 	static int counter = 0;
 	counter++;
 
-	int duration = 4000;
+	int duration = 2000;
 
 	if(norm.x > 0.7071) { // 1/sqrt(2)
 		if(counter % (2*duration) == 0)

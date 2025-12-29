@@ -1,6 +1,7 @@
 #ifndef _NTR_GRAPH_H_
 #define _NTR_GRAPH_H_ 1
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 typedef struct {
 	int x,y;
@@ -39,6 +40,8 @@ void graphInit(const char *title, int w, int h);
 void graphDestroy(void);
 // Loads texture from BMP file ('fname')
 SDL_Texture *textureLoad(const char *fname);
+SDL_Texture *textCreate(TTF_Font *font, const char *text, SDL_Color color);
+SDL_Texture *textCreate2(TTF_Font *font, const char *text, SDL_Color color, int *w, int *h);
 
 #endif // !_NTR_GRAPH_H_
 

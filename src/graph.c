@@ -3,11 +3,10 @@
 #include "base/exitCodes.h"
 #include "global.h"
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
-int width = 500, height = 500;
+int width = 1920, height = 1080;
 
 void graphInit(const char *title, int w, int h) {
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -25,6 +24,7 @@ void graphInit(const char *title, int w, int h) {
 		LOGF(L_ERR, "Couldn't createe renderer, '%s'", SDL_GetError());
 		cleanUp(E_SDL);
 	}
+	SDL_RenderSetLogicalSize(renderer, 1920, 1080);
 }
 void graphDestroy(void) {
 	SDL_DestroyWindow(window);
@@ -41,5 +41,24 @@ SDL_Texture *textureLoad(const char *fname) {
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
 	SDL_FreeSurface(surf);
 	return texture;
+}
+
+SDL_Texture *textCreate(TTF_Font *font, const char *text, SDL_Color color) {
+	SDL_Surface *surf = TTF_RenderText_Solid(font, text, color);
+	if(!font)
+		LOG(L_ERR, "Couldn't create text surface");
+	SDL_FreeSurface(surf);
+	return SDL_CreateTextureFromSurface(renderer, surf);
+}
+
+SDL_Texture *textCreate2(TTF_Font *font, const char *text, SDL_Color color, int *w, int *h) {
+	SDL_Surface *surf = TTF_RenderText_Solid(font, text, color);
+	*w = surf->w;
+	*h = surf->h;
+	if(!font)
+		LOG(L_ERR, "Couldn't create text surface");
+	SDL_Texture *ret = SDL_CreateTextureFromSurface(renderer, surf);
+	SDL_FreeSurface(surf);
+	return ret;
 }
 
