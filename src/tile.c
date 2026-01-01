@@ -1,4 +1,5 @@
 #include "tile.h"
+#include "base/alloc.h"
 #include "base/log.h"
 #include "base/exitCodes.h"
 #include "global.h"
@@ -22,13 +23,29 @@ void tilemapDraw() {
 	}
 }
 
-void tilemapInit(TileEnv _env, const int *const _tiles) {
-	tiles = malloc(sizeof(*tiles)*_env.w*_env.h);
-	tilemapRefill(_env, _tiles);
-}
-void tilemapRefill(TileEnv _env, const int *const _tiles) {
+void tilemapLoad(TileEnv _env, const int *const _tiles) {
+	if(env.w*env.h == 0) 
+		goto after;
+	if(env.w*env.h < _env.w*_env.h) {
+		arenaFree(&env.arena, tiles, sizeof(*tiles)*env.w*env.h);
+		arenaFree(&env.arena, env.textures, sizeof(*env.textures)*env.len);
+		arenaFree(&env.arena, env.properties, sizeof(*env.properties)*env.len);
+
+
+		tiles = arenaAlloc(&_env.arena, sizeof(*_tiles)*_env.w*_env.h);
+		env.textures = arenaAlloc(&_env.arena, sizeof(*_env.textures)*_env.len);
+		env.properties = arenaAlloc(&_env.arena, sizeof(*_env.properties)*_env.len);
+	}
+after:
 	env = _env;
-	memcpy(tiles, _tiles, sizeof(*tiles)*env.w*env.h);
+	if(!tiles) {
+		tiles = arenaAlloc(&env.arena, sizeof(*_tiles)*env.w*env.h);
+		env.textures = arenaAlloc(&env.arena, sizeof(*env.textures)*env.len);
+		env.properties = arenaAlloc(&env.arena, sizeof(*env.properties)*env.len);
+	}
+	memcpy(tiles, _tiles, sizeof(*_tiles)*env.w*env.h);
+	memcpy(env.textures, _env.textures, sizeof(*_env.textures)*env.len);
+	memcpy(env.properties, _env.properties, sizeof(*_env.properties)*env.len);
 }
 void tilemapDestroy() {
 	free(tiles);

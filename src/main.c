@@ -5,6 +5,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "base/alloc.h"
+#include "base/arr.h"
+#include "base/error.h"
 #include "base/exitCodes.h"
 #include "base/log.h"
 #include "base/lt.h"
@@ -48,10 +51,12 @@ void gameLoop() {
 				break;
 			default: break;
 		}
+		movementMoveAll();
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		tilemapDraw();
 		entitysystemDrawAll();
 		menuSystemDrawAll();
 

@@ -9,6 +9,7 @@
 #include "base/exitCodes.h"
 #include "graph.h"
 #include "menu.h"
+#include "scenes/ulrach1.h"
 
 void mainMenu(void) {
 	SDL_Texture *bg = textureLoad("res/main.bmp");
@@ -51,7 +52,8 @@ void mainMenu(void) {
 void mainMenuHandle(int _x, int opt) {
 	switch (opt) {
 		case 1: { // start
-			//ulrach()
+			menuSystemClear();
+			ulrach();
 		} break;
 		case 2: { // map
 

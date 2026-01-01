@@ -27,7 +27,9 @@ void menuFreeTextures(Menu *menu);
  * that the following functions can operate
  * on it. Initializes on the first call. */
 void menuSystemRegister(Menu menu);
-/** Remove all registered menus */
+/** Remove all registered menus.
+ * frees every menu item,
+ * and destroys their textures */
 void menuSystemClear(void);
 /** Draw all registered menus with each of their
  * menu items if their texture is non-null */

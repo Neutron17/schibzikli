@@ -38,7 +38,7 @@ Entity *entitysystemAdd(Entity *e) {
 	e->_id = id_counter;
 	id_counter++;
 	pthread_mutex_unlock(&id_mutex);
-	array_push(&entities, e);
+	array_push_ptr(&entities, e);
 	e = unwrap(array_lastptr(entities));
 	return e;
 }

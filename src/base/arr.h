@@ -84,6 +84,8 @@ Error array_remove_first(Array_t *arr, ArrayCondIter iter);
 Option array_remove_if(Array_t *arr, ArrayCondIter iter);
 /** Zeros out the value at index n */
 Error array_null(Array_t *arr, size_t n);
+/** Remove all elements of "arr", and memsets the data to 0 */
+Error array_zero(Array_t *arr);
 /** Remove all elements of "arr" */
 Error array_clear(Array_t *arr);
 /** Copy "src"'s elements to "dest" */

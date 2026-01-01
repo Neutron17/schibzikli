@@ -16,6 +16,9 @@
 #include "graph.h"
 #include "entitysystem.h"
 
+// prefered size for arena
+#define TILESYS_SZ(L,W,H) (sizeof(SDL_Texture *)*(L) + sizeof(TileProp)*(L) + sizeof(int)*(W)*(H))
+
 struct TEntityNode {
 	Entity entity;
 	Entity *next;
@@ -44,13 +47,12 @@ typedef struct {
 	SDL_Texture **textures;
 	// 'properties' are NOT freed by the tilesystem
 	TileProp *properties;
+	BareAllocator arena;
 	int len;
 	int w,h;
-	BareAllocator arenaAllocator;
 } TileEnv;
 
-void tilemapInit(TileEnv _env, const int *const _tiles);
-void tilemapRefill(TileEnv _env, const int *const _tiles);
+void tilemapLoad(TileEnv _env, const int *const _tiles);
 void tilemapDestroy();
 
 /** Copies the tile textures to the renderer

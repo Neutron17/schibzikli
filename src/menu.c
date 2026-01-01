@@ -23,7 +23,12 @@ void menuFreeTextures(Menu *menu) {
 		SDL_DestroyTexture(it->texture);
 		it->texture = NULL;
 	}
-
+}
+static void menuFreeTextures2(Menu menu) {
+	for(int i = 0; i < menu.count; i++) {
+		MenuItem it  = menu.items[i];
+		SDL_DestroyTexture(it.texture);
+	}
 }
 
 void menuSystemRegister(Menu menu) {
@@ -34,14 +39,17 @@ void menuSystemRegister(Menu menu) {
 	}
 	array_push(&_menus, menu);
 }
+static bool set = false;
 void menuSystemClear(void) {
+	set =true;
 	for(int i = 0; i < _menus.used; i++) {
 		Menu menu;
 		UNWRAP_TO(array_get(_menus, i), 
 			menu, Menu);
+		menuFreeTextures2(menu);
 		free(menu.items);
 	}
-	array_clear(&_menus);
+	array_zero(&_menus);
 }
 void menuSystemDrawAll(void) {
 	for(int i = 0; i < _menus.used; i++) {
@@ -57,13 +65,13 @@ void menuSystemInput(SDL_Event e) {
 		SDL_Rect rect = { e.button.x-10,e.button.y-10, 20,20 };
 
 		for(int i = 0; i < _menus.used; i++) {
-			Menu menu;
-			UNWRAP_TO(array_get(_menus, i), 
+			Menu *menu;
+			UNWRAP_TO_PTR(array_get(_menus, i), 
 				menu, Menu);
-			for(int j = 0; j < menu.count; j++) {
-				MenuItem it = menu.items[j];
+			for(int j = 0; j < menu->count; j++) {
+				MenuItem it = menu->items[j];
 				if(it.cb && DO_RECT_INTERSECT(&it.pos, &rect))
-					it.cb(menu.id, it.id);
+					it.cb(menu->id, it.id);
 			}
 		}
 	} 

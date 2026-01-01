@@ -193,6 +193,11 @@ Error array_null(Array_t *arr, size_t n) {
 	memset(NTH_AP(arr, n), 0, arr->mem_sz);
 	return ERROR_SUCC;
 }
+Error array_zero(Array_t *arr) {
+	memset(arr->members, 0, arr->mem_sz*arr->used);
+	arr->used = 0;
+	return ERROR_SUCC;
+}
 
 Error array_clear(Array_t *arr) { 
 	arr->used = 0;

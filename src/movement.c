@@ -27,7 +27,7 @@ void movementDestroy(void) {
 /** Binds callback to entity, not thread safe */
 void movementBindCb(Entity *entity, movementCallbackFn cb) {
 	const struct MovePair pair = { entity, cb };
-	array_push(&movableEntityMap, &pair);
+	array_push_ptr(&movableEntityMap, &pair);
 	entity->_moveID = movableEntityMap.used;
 	if(DEBUG)
 		LOGF(L_DEBUG, "ADDED MOVE ID: %d\n", entity->_moveID);
