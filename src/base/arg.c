@@ -60,6 +60,7 @@ struct Arg getArgs(int argc, char *argv[]) {
 }
 
 void parseArgs(struct Arg arg) {
+	arg.isDebug = arg.isDebug;
 	// TODO
 }
 

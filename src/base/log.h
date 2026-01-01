@@ -20,14 +20,20 @@ enum LogLevel {
 	#define LOGF(LVL, ...) __log_f_(LVL, __FILE__, __func__, __LINE__, __VA_ARGS__)
 #else
 	#define LOG(LVL, MSG) __log_(LVL, __FILE__, __LINE__, MSG)
-	#define LOGF(LVL, ...) __log_f_(LVL, __FILE__, __LINE__, __VA_ARGS__)
+	#define LOGF(LVL, ...) __logf_(LVL, __FILE__, __LINE__, __VA_ARGS__)
 #endif
 
 void __log_f_(enum LogLevel level, const char *file,
 #ifndef NO_FUNC
 		const char *func,
 #endif
-		int line, const char *format, ...);
+		int line, const char *format, ...) 
+#ifndef NO_FUNC
+	__attribute__ ((format (printf, 5, 6)));
+#else
+	__attribute__ ((format (printf, 4, 5)));
+#endif
+
 void __log_(enum LogLevel level, const char *file,
 #ifndef NO_FUNC
 		const char *func,
