@@ -9,12 +9,12 @@
  * 'properties' field in the 'TileEnv' struct.
  * 
  * */
+#include "base/alloc.h"
 #ifndef _NTR_TILE_H_
 #define _NTR_TILE_H_ 1
 #include <SDL2/SDL_render.h>
 #include "graph.h"
 #include "entitysystem.h"
-#include "base/arena.h"
 
 struct TEntityNode {
 	Entity entity;
@@ -46,7 +46,7 @@ typedef struct {
 	TileProp *properties;
 	int len;
 	int w,h;
-	Arena arenaAllocator;
+	BareAllocator arenaAllocator;
 } TileEnv;
 
 void tilemapInit(TileEnv _env, const int *const _tiles);

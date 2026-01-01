@@ -3,6 +3,7 @@
 #include <pthread.h>
 
 #include "entitysystem.h"
+#include "base/alloc.h"
 #include "base/arr.h"
 #include "base/error.h"
 #include "base/exitCodes.h"
@@ -17,7 +18,9 @@ static int id_counter = 1;
 static pthread_mutex_t id_mutex;
 
 void entitysystemInit(void) {
-	UNWRAP_TO_COMPLEX(array_init(Entity, 3), entities, Array_t);
+	UNWRAP_TO_COMPLEX_FN(
+		array_init(arenaInitTyped(Entity, 8),Entity, 3), 
+		entities, Array_t);
 	if(pthread_mutex_init(&id_mutex, NULL)) {
 		LOG(L_ERR, "Failed to create entity system mutex");
 		cleanUp(E_ALLOC);
@@ -64,7 +67,7 @@ void entitysystemRemove(Entity *e) {
 	memset(e, 0, sizeof(*e));
 }
 
-static const Pos spriteLUT[] = {
+static Pos spriteLUT[] = {
 	[AS_BACK] = POS(64,2*64),
 	[AS_BACK_1] = POS(0,0),
 	[AS_BACK_2] = POS(0,64),

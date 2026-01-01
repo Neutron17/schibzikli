@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "base/alloc.h"
 #include "base/arr.h"
 #include "base/error.h"
 #include "base/log.h"
@@ -17,8 +18,13 @@ Scene sceneParse(const char *fname, const char *resourcePath) {
 		return (Scene) {0};
 	}
 	Scene ret = { 0 };
-	UNWRAP_TO_COMPLEX(array_init(SDL_Texture *, 10), ret.textures, Array_t);
-	UNWRAP_TO_COMPLEX(array_init(struct EntitySereal, 10), ret.entities, Array_t);
+	Allocator arena = arenaInit(10*sizeof(SDL_Texture *) + 10*sizeof(struct EntitySereal));
+	UNWRAP_TO_COMPLEX_FN(
+		array_init(arena, SDL_Texture *, 10), 
+	     ret.textures, Array_t);
+	UNWRAP_TO_COMPLEX_FN(
+		array_init(arena, struct EntitySereal, 10), 
+	     ret.entities, Array_t);
 	int c;
 	while((c=fgetc(file)) != EOF && c != PT_START);
 	while((c=fgetc(file)) != EOF && c != PT_END) {

@@ -1,6 +1,7 @@
 # TODOs
 
+ - Entity Component System
  - Tilemap get speed
- - Universal entity orientation, etc.
+ - Audio
  - Font rendering
 

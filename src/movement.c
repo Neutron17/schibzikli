@@ -1,4 +1,5 @@
 #include "movement.h"
+#include "base/alloc.h"
 #include "base/arr.h"
 #include "base/log.h"
 #include "entitysystem.h"
@@ -16,7 +17,9 @@ const static Uint8 *states;
 
 void movementInit(void) {
 	states = SDL_GetKeyboardState(NULL);
-	UNWRAP_TO_COMPLEX(array_init(struct MovePair, 3), movableEntityMap, Array_t);
+	UNWRAP_TO_COMPLEX_FN(
+		array_init(arenaInitTyped(struct MovePair, 8), struct MovePair, 3), 
+	     movableEntityMap, Array_t);
 }
 void movementDestroy(void) {
 	array_destroy(&movableEntityMap);

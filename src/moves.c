@@ -106,7 +106,7 @@ PosF movePlayer(Entity *self, const Uint8 *const keystates, TileProp tile) {
 	);
 	POS_ADD2(pl, delta);
 	if(DEBUG)
-		LOGF(L_DEBUG, "Player moved to (%d %d)", pl.x, pl.y);
+		LOGF(L_DEBUG, "Player moved to (%f %f)", pl.x, pl.y);
 	return pl;
 }
 
